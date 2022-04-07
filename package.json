@@ -10,7 +10,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://Juliojar4.github.io/login-account",
+  "homepage": "https://juliojar4.github.io/login-account/",
   "keywords": [],
   "author": "",
   "license": "ISC",
