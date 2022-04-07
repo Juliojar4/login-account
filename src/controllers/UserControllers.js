@@ -2,8 +2,9 @@ import User from '../models/User.js'
 import creatToken from '../helpers/creat_token.js'
 import getToken from '../helpers/getToken.js'
 import getUserByToken from '../helpers/getUserByToken.js'
-// import validate from '../helpers/validate.js'
 import jwt from 'jsonwebtoken'
+import validateName from '../service/nameValidation.js'
+import cpfValidate from '../service/cpfValidate.js'
 
 export default class userControllers {
 
@@ -11,11 +12,15 @@ export default class userControllers {
     
         const { name, email, cpf, password } = req.body
 
-        const usuarioExistente = await User.findOne({ email })
-            if(usuarioExistente){
-                res.status(422).json({ message: 'Email já existente em nosso banco de dados' })  
-                    return               
-            }
+        if (validateName(name, res)) return
+        if (cpfValidate(cpf, res)) return
+        console.log(validateName(name, res))
+
+        // const usuarioExistente = await User.findOne({ email })
+        //     if(usuarioExistente){
+        //         res.status(422).json({ message: 'Email já existente em nosso banco de dados' })  
+        //             return               
+        //     }
       
         const user = new User({
             name: name,
@@ -86,7 +91,7 @@ export default class userControllers {
         console.log(typeof User.schema.obj );
 
         user.name = name
-        user.cpf = email
+        user.cpf = cpf
         user.email = email
         user.password = password
 

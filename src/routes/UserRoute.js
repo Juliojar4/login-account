@@ -14,6 +14,7 @@ const updateUser = userControllers.updateUser
 routers.post('/register', register)
 routers.post('/login', login)
 routers.get('/checkUser', checkUser)
-routers.patch('/edit', verifyToken , updateUser)
+routers.patch('/edit', verifyToken, updateUser)
+ 
 
 export default routers
