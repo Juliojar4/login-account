@@ -23,6 +23,11 @@ const Usuario = model(
             type: String,
             required:true
         },
+
+        confirPassword: {
+            type: String,
+            required:true           
+        }
     },
     { timeseries:true }
     )

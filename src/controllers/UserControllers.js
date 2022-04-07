@@ -3,30 +3,37 @@ import creatToken from '../helpers/creat_token.js'
 import getToken from '../helpers/getToken.js'
 import getUserByToken from '../helpers/getUserByToken.js'
 import jwt from 'jsonwebtoken'
+
+//? validators
 import validateName from '../service/nameValidation.js'
 import cpfValidate from '../service/cpfValidate.js'
+import emailValidator from '../service/emailValidator.js'
+import passwordValidator from '../service/passwordValidator.js'
 
 export default class userControllers {
 
     static async register(req, res) {
     
-        const { name, email, cpf, password } = req.body
+        const { name, email, cpf, password,confirPassword } = req.body
 
         if (validateName(name, res)) return
-        if (cpfValidate(cpf, res)) return
-        console.log(validateName(name, res))
+        if (!cpfValidate(cpf, res)) return
+        if (!emailValidator(email, res)) return
+        if (!passwordValidator(password, confirPassword, res)) return
+       
 
-        // const usuarioExistente = await User.findOne({ email })
-        //     if(usuarioExistente){
-        //         res.status(422).json({ message: 'Email já existente em nosso banco de dados' })  
-        //             return               
-        //     }
+        const usuarioExistente = await User.findOne({ email })
+            if(usuarioExistente){
+                res.status(422).json({ message: 'Email já existente em nosso banco de dados' })  
+                    return               
+            }
       
         const user = new User({
             name: name,
             email: email,            
             cpf: cpf,   
-            password:password  
+            password: password,
+            confirPassword: confirPassword
         })
         try {
             const newUser = await user.save();
@@ -85,9 +92,6 @@ export default class userControllers {
         const email = req.body.email
         const password = req.body.password
 
-        // User.schema.obj.map((value) => {
-        //     console.log( value);
-        // })
         console.log(typeof User.schema.obj );
 
         user.name = name
