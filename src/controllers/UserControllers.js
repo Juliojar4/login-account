@@ -14,12 +14,12 @@ export default class userControllers {
 
     static async register(req, res) {
     
-        const { name, email, cpf, password,confirPassword } = req.body
+        const { name, email, cpf, password} = req.body
 
         if (validateName(name, res)) return
-        if (!cpfValidate(cpf, res)) return
         if (!emailValidator(email, res)) return
-        if (!passwordValidator(password, confirPassword, res)) return
+        if (!cpfValidate(cpf, res)) return
+        // if (!passwordValidator(password, confirPassword, res)) return
        
 
         const usuarioExistente = await User.findOne({ email })
@@ -27,13 +27,12 @@ export default class userControllers {
                 res.status(422).json({ message: 'Email já existente em nosso banco de dados' })  
                     return               
             }
-      
+        
         const user = new User({
             name: name,
             email: email,            
             cpf: cpf,   
             password: password,
-            confirPassword: confirPassword
         })
         try {
             const newUser = await user.save();
@@ -70,6 +69,7 @@ export default class userControllers {
 
         if (req.headers.authorization) {
             const token = getToken(req)
+            console.log(token,'ola')
             const decoded = jwt.verify(token, 'segredo')
             
             usercorent = await User.findById(decoded.id)
@@ -82,6 +82,10 @@ export default class userControllers {
         res.status(200).send(usercorent)
     }
 
+    static async ola(req, res) {
+       res.status(200).send(res.status(200).json({ message: `ola ola`}))
+    }
+
     static async updateUser(req,res) {
         const token = getToken(req)
 
@@ -92,7 +96,10 @@ export default class userControllers {
         const email = req.body.email
         const password = req.body.password
 
-        console.log(typeof User.schema.obj );
+        if (validateName(name, res)) return
+        if (!cpfValidate(cpf, res)) return
+        if (!emailValidator(email, res)) return
+       
 
         user.name = name
         user.cpf = cpf

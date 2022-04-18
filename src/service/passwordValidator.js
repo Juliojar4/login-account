@@ -12,7 +12,9 @@ const validatePassword = (password,confirPassword,res) => {
     if (genericErr(password, 'password', res)) return
     if (genericErr(confirPassword, 'confirPassword', res)) return
 
-    (password != confirPassword) ? erros.push('As senhas são diferentes') : '' 
+    if (password != confirPassword) {
+        erros.push('As senhas são diferentes')
+    }
 
     if (password.length < 8) {
         erros.push('A senha deve ter no minimo 8 caracteries')
